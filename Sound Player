@@ -1,0 +1,161 @@
+public class Ajenni5Program42  
+{  
+  
+  public static void main (String[] args)       
+  {  
+    //ID information 
+    System.out.println("Alexis Jennings");      
+    System.out.println("net-ID: Ajenni5");      
+    System.out.println("CS 111");      
+    System.out.println("Lab: Monday 12:00-12:50PM");    
+    System.out.println();  
+    
+    
+    //Create string to get user input for notes. 
+    String wav = SimpleInput.getString("Enter a sequence of notes to play: ");
+    System.out.println(wav);
+    
+    
+    //Creates integer to store lenght of string
+    //Creates final sound to hold all notes of the string
+    int songL = wav.length();
+    Sound finalSound = new Sound (songL);
+    
+    
+    //Loop to convert string into sound waves
+    for(int i = 0; i < wav.length(); i++)
+    {
+      //Initialize frequency variable
+      double freq;
+      
+      //Accesses the individual characters
+      char input = wav.charAt(i);
+      
+      //Stores individual notes in an array to display
+      char[] sound = new char[wav.charAt(i)];
+      char[] notes = {"78!9@a#bc$d%ef^g&A*BC(D)EF_G+H"};
+     
+      
+      //Determine Frequency of note
+      //If '.', the frequency will go to zero for silence
+      //else, the frequency for the individual character will be calculated
+      if(notes != input){
+        
+        freq = 0.0;
+      
+      }
+      else{
+        
+        freq = calcFreq(input);
+      }     
+      
+      //Create 1/8 second sound wave for individual note/frequency
+      Sound Note = sineWave(freq, 20000);
+      
+      
+      //Joins the note to end of final sound
+      finalSound = mergeSounds(finalSound, Note);  
+      
+    } 
+    
+      //Plays sound
+      finalSound.explore();
+      finalSound.play();
+      
+      // Saves/writes a created sound to the file system
+      String output;
+      output = FileChooser.pickAFile();
+      finalSound.write(output);
+        
+  }   
+  //End Main Method 
+  
+  
+  //Method to calculate Frequency and notes based on user input. 
+  public static double calcFreq ( char note )
+  {
+    
+    //Create string to specify note usable note representations 
+    String noteRepresentation = "78!9@a#bc$d%ef^g&A*BC(D)EF_G+H";
+    double freq;
+       
+    int x = noteRepresentation.indexOf(note);  
+    int y = noteRepresentation.indexOf('H');  // y becomes 29
+   
+    double exponent = (x - y)/12.0;
+ 
+    freq = 440.0 * Math.pow (2.0, exponent); // freq becomes 196.0 (if rounded) 
+   
+    return freq;
+    
+  }
+  
+  
+  //Method to create Sine wave for notes. Sine waves will distinguish the notes
+  //from one another
+  public static Sound sineWave (double freq, int amplitude)
+  {   
+    
+    int maxLength = 22050/8;              // Divide by 4 to make quarter note
+    Sound s = new Sound (maxLength);
+    
+    double sampleRate = s.getSamplingRate();
+    double rawV;
+    int indexV;
+    int newV;
+    double interval = 1.0/freq;
+    
+    double samplesPerCycle = interval * sampleRate;
+    double maxV = 2 * Math.PI;
+    
+    SoundSample sound[] = s.getSamples();
+    
+    for ( int i = 0; i < s.getLength(); i++ )
+    {
+      rawV = Math.sin((i/samplesPerCycle) * maxV);
+       
+      newV = (int) (amplitude * rawV);
+      
+      sound[i].setValue ( newV );
+    }
+    
+    return s;
+  }
+  
+  
+  //Method to create song from joined sounds. Adds the most recent note
+  //to the end of the final sound
+  public static Sound mergeSounds ( Sound s1 , Sound s2)
+  {
+    int length1 = s1.getLength();
+    int length2 = s2.getLength();
+    int finalLength = length1 + length2;
+    
+    Sound wave = new Sound(finalLength);
+    
+    SoundSample sound1[] = s1.getSamples();
+    SoundSample sound2[] = s2.getSamples();
+    SoundSample finalSound[] = wave.getSamples();
+    
+   
+    
+    for (int i = 0 ; i < length1 ; i++ )
+    {
+      int amp1 = sound1[i].getValue();
+      int total = i;
+      finalSound[total].setValue ( amp1 );
+    }
+    
+    for (int i = 0 ; i < length2; i++ )
+    {
+      int amp2 = sound2[i].getValue();
+      int total = i + length1;
+      finalSound[total].setValue ( amp2 );
+    }
+    
+    return wave;
+  }
+  
+  
+}       
+// end of program   
