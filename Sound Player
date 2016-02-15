@@ -1,4 +1,4 @@
-public class Ajenni5Program42  
+public class Ajenni5Program4  
 {  
   
   public static void main (String[] args)       
@@ -44,8 +44,8 @@ public class Ajenni5Program42
         freq = 0.0;
       
       }
-      else{
-        
+      else
+      {  
         freq = calcFreq(input);
       }     
       
