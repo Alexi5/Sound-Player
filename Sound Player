@@ -1,14 +1,4 @@
-public class Ajenni5Program4  
-{  
-  
-  public static void main (String[] args)       
-  {  
-    //ID information 
-    System.out.println("Alexis Jennings");      
-    System.out.println("net-ID: Ajenni5");      
-    System.out.println("CS 111");      
-    System.out.println("Lab: Monday 12:00-12:50PM");    
-    System.out.println();  
+
     
     
     //Create string to get user input for notes. 
@@ -22,65 +12,57 @@ public class Ajenni5Program4
     Sound finalSound = new Sound (songL);
     
     
-    //Loop to convert string into sound waves
+    //Converts sting to sound wave
     for(int i = 0; i < wav.length(); i++)
     {
-      //Initialize frequency variable
+      
       double freq;
       
-      //Accesses the individual characters
       char input = wav.charAt(i);
       
-      //Stores individual notes in an array to display
       char[] sound = new char[wav.charAt(i)];
       char[] notes = {"78!9@a#bc$d%ef^g&A*BC(D)EF_G+H"};
      
       
-      //Determine Frequency of note
-      //If '.', the frequency will go to zero for silence
-      //else, the frequency for the individual character will be calculated
-      if(notes != input){
-        
+      //If '.' character represents 0 frequency
+      if(notes != input)
+      {
         freq = 0.0;
       
-      }
-      else
-      {  
+      } else {  
+      
         freq = calcFreq(input);
       }     
       
-      //Create 1/8 second sound wave for individual note/frequency
+    
       Sound Note = sineWave(freq, 20000);
       
-      
-      //Joins the note to end of final sound
       finalSound = mergeSounds(finalSound, Note);  
       
     } 
     
-      //Plays sound
-      finalSound.explore();
-      finalSound.play();
+    //Plays sound
+    finalSound.explore();
+    finalSound.play();
       
-      // Saves/writes a created sound to the file system
-      String output;
-      output = FileChooser.pickAFile();
-      finalSound.write(output);
+    
+    String output;
+    output = FileChooser.pickAFile();
+    finalSound.write(output);
         
   }   
   //End Main Method 
   
   
-  //Method to calculate Frequency and notes based on user input. 
+  //Method calculates Frequency and notes based on user input. 
   public static double calcFreq ( char note )
   {
-    
-    //Create string to specify note usable note representations 
+  
     String noteRepresentation = "78!9@a#bc$d%ef^g&A*BC(D)EF_G+H";
     double freq;
        
     int x = noteRepresentation.indexOf(note);  
-    int y = noteRepresentation.indexOf('H');  // y becomes 29
+    int y = noteRepresentation.indexOf('H');  
    
     double exponent = (x - y)/12.0;
  
@@ -91,12 +73,11 @@ public class Ajenni5Program4
   }
   
   
-  //Method to create Sine wave for notes. Sine waves will distinguish the notes
-  //from one another
+  //Method creates Sine wave for different notes
   public static Sound sineWave (double freq, int amplitude)
   {   
     
-    int maxLength = 22050/8;              // Divide by 4 to make quarter note
+    int maxLength = 22050/8;             
     Sound s = new Sound (maxLength);
     
     double sampleRate = s.getSamplingRate();
@@ -123,8 +104,7 @@ public class Ajenni5Program4
   }
   
   
-  //Method to create song from joined sounds. Adds the most recent note
-  //to the end of the final sound
+  //Method creates song from joined notes. 
   public static Sound mergeSounds ( Sound s1 , Sound s2)
   {
     int length1 = s1.getLength();
@@ -137,7 +117,6 @@ public class Ajenni5Program4
     SoundSample sound2[] = s2.getSamples();
     SoundSample finalSound[] = wave.getSamples();
     
-   
     
     for (int i = 0 ; i < length1 ; i++ )
     {
